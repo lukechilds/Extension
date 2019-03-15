@@ -1,11 +1,124 @@
-.HiveExtension-Twitter_tweet-author-score {
-    color: #4ab3f4;
-    text-align: center;
-    display: block;
-    margin-left: 0px;
-    position: absolute;
-    left: 0;
-    width: 71px;
-    top: auto;
-    margin-top: 60px;
+.HiveExtension-Twitter {
+    &_tweet-author-score {
+        color: #4ab3f4;
+        text-align: center;
+        display: block;
+        margin-left: 0px;
+        position: absolute;
+        left: 0;
+        width: 71px;
+        top: auto;
+        margin-top: 60px;
+    }
+
+    &_popup {
+        &-profile {
+            position: absolute;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.25);
+        }
+    }
+}
+
+.radial-progress {
+	$circle-size: 160px;
+	$circle-background: #d6dadc;
+	$circle-color: #8784ff;
+	$inset-size: $circle-size - 20px;
+	$inset-color: #fbfbfb;
+	$transition-length: 1s;
+	$shadow: none;
+	$percentage-font-size: 22px;
+	$percentage-text-width: 57px;
+
+	margin: 50px;
+	width:  $circle-size;
+	height: $circle-size;
+
+	background-color: $circle-background;
+	border-radius: 50%;
+	.circle {
+		.mask, .fill, .shadow {
+			width:    $circle-size;
+			height:   $circle-size;
+			position: absolute;
+			border-radius: 50%;
+		}
+		.shadow {
+			box-shadow: $shadow inset;
+		}
+		.mask, .fill {
+			-webkit-backface-visibility: hidden;
+			transition: -webkit-transform $transition-length;
+			transition: -ms-transform $transition-length;
+			transition: transform $transition-length;
+			border-radius: 50%;
+		}
+		.mask {
+			clip: rect(0px, $circle-size, $circle-size, $circle-size/2);
+			.fill {
+				clip: rect(0px, $circle-size/2, $circle-size, 0px);
+				background-color: $circle-color;
+			}
+		}
+	}
+
+	$i: 0;
+    $increment: 180deg / 100;
+    
+    @for $i from 1 through 100 {
+		&[data-progress="#{$i}"] {
+			.circle {
+				.mask.full, .fill {
+					-webkit-transform: rotate($increment * $i);
+					-ms-transform: rotate($increment * $i);
+					transform: rotate($increment * $i);
+				}	
+				.fill.fix {
+					-webkit-transform: rotate($increment * $i * 2);
+					-ms-transform: rotate($increment * $i * 2);
+					transform: rotate($increment * $i * 2);
+				}
+			}
+		}
+	}
+
+    .circle_inset {
+        width:       $inset-size;
+		height:      $inset-size;
+		position:    absolute;
+		margin-left: ($circle-size - $inset-size)/2;
+		margin-top:  ($circle-size - $inset-size)/2;
+
+		background-color: $inset-color;
+        border-radius: 50%;
+        
+        .percentage {
+			height:   $percentage-font-size;
+			width:    $percentage-text-width;
+			overflow: hidden;
+
+			position: absolute;
+			top:      ($inset-size - $percentage-font-size) / 2;
+			left:     ($inset-size - $percentage-text-width) / 2;
+
+            line-height: 1;
+            
+			.numbers {
+                transition: width $transition-length;
+                
+				span {
+					width:          $percentage-text-width;
+					display:        inline-block;
+					vertical-align: top;
+					text-align:     center;
+					font-weight:    800;
+					font-size:      $percentage-font-size;
+					font-family:    "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+					color:          black;
+				}
+			}
+		}
+    }
 }

@@ -1,3 +1,7 @@
+import { CONFIG } from '../../../config';
+
+console.log('config is ', CONFIG);
+
 const PROFILE_SCORE_EXTENSION_CLASS_NAME = 'HiveExtension-Twitter_profile-score';
 const PROFILE_SIDEBAR_SELECTOR = '.ProfileSidebar';
 const PROFILE_NAV_SELECTOR = '.ProfileNav';
@@ -43,6 +47,44 @@ export class TwitterProfileScoreExtension {
                   <span class="ProfileNav-value" data-count="${roundedScore}" data-is-compact="false">${roundedScore}</span>
             </div>
         `;
+
+    const displayPopup = () => {
+      const HOVER_POPUP_CLASS_NAME = 'HiveExtension-Twitter_popup-profile';
+
+      if (displayElement.querySelector(`.${HOVER_POPUP_CLASS_NAME}`)) {
+        return;
+      }
+
+      const percentage = Math.floor((roundedScore / CONFIG.MAX_SCORE) * 100);
+
+      const popupNode = document.createElement('div');
+      popupNode.className = HOVER_POPUP_CLASS_NAME;
+      popupNode.innerHTML = `
+            <h3>PeopleScore</h3>
+            <div class="radial-progress" data-progress="${percentage}">
+                <div class="circle">
+                    <div class="mask full">
+                        <div class="fill"></div>
+                    </div>
+                    <div class="mask half">
+                        <div class="fill"></div>
+                        <div class="fill fix"></div>
+                    </div>
+                </div>
+                <div class="circle_inset">
+                    <div class="percentage">
+                        <div class="numbers">
+                            <span>${roundedScore}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+      displayElement.appendChild(popupNode);
+    };
+
+    displayElement.addEventListener('click', displayPopup, false);
 
     document
       .querySelector('.ProfileNav-item:nth-of-type(4)')

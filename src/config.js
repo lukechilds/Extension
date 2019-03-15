@@ -5,5 +5,6 @@ export const CONFIG = {
     alwaysDisplayCryptoScoreOnProfiles: true,
     displayHighestRankInCluster: false,
     displayHighestScoreInCluster: false
-  }
+  },
+  MAX_SCORE: 1000
 };
