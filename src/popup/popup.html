@@ -6,9 +6,25 @@
         <h3>Hive.one</h3>
         <p>Please reload Twitter page after changing these settings.</p>
         <div class="HiveExtension-options_option">
-          <div class="HiveExtension-options_option_title">Always display crypto score on profiles</div>
-          <br/>
-          <input class="HiveExtension-options_option_input toggle" type="checkbox" name="alwaysDisplayCryptoScoreOnProfiles" value="">
+          <div class="HiveExtension-options_option_title">Display Settings</div>
+          <select class="HiveExtension-options_option_select" id="display-settings-select">
+            <option value="showRanksWithScoreFallback">Show ranks with score fallback</option>
+            <option value="showScores">Show scores</option>
+            <option value="showRanks">Show ranks</option>
+          </select>
+        </div>
+        <br/>
+        <div class="HiveExtension-options_option">
+          <div class="HiveExtension-options_option_title">Cluster Options</div>
+          <select class="HiveExtension-options_option_select" id="cluster-options-select">
+            <option value="Crypto">Display combined crypto cluster</option>
+            <option value="Highest">Display cluster with the highest values</option>
+            <option value="BTC">Display BTC cluster only</option>
+            <option value="ETH">Display ETH cluster only</option>
+            <option value="XRP">Display XRP cluster only</option>
+            <option value="BCH">Display BCH cluster only</option>
+            <option value="LTC">Display LTC cluster only</option>
+          </select>
         </div>
   </body>
 </html>

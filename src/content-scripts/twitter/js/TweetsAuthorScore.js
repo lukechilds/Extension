@@ -22,11 +22,26 @@ export class TwitterTweetsAuthorScoreExtension {
 
       const authorId = tweet.getAttribute('data-user-id');
 
-      const userScore = await this.api.getTwitterUserScore(authorId);
+      const { score: userScore } = await this.api.getTwitterUserScore(authorId);
+
+      const tweetIsThread =
+        Boolean(tweet.querySelector('.self-thread-tweet-cta')) ||
+        tweet.parentElement.parentElement.classList.contains('ThreadedConversation-tweet');
+      const isDarkTheme = Boolean(
+        document.querySelector('.js-nightmode-icon.Icon--crescentFilled')
+      );
+
+      let threadClass = TWEET_AUTHOR_SCORE_EXTENSION_CLASS_NAME + '_display-in-thread';
+
+      if (isDarkTheme) {
+        threadClass += '-dark';
+      }
 
       const userScoreDisplay = document.createElement('div');
       userScoreDisplay.classList.add(TWEET_AUTHOR_SCORE_EXTENSION_CLASS_NAME);
-      userScoreDisplay.innerHTML = `<b>${Math.round(userScore)}</b>`;
+      userScoreDisplay.innerHTML = `<b class="${TWEET_AUTHOR_SCORE_EXTENSION_CLASS_NAME}_display ${
+        tweetIsThread ? threadClass : ''
+      }">${Math.round(userScore)}</b>`;
 
       tweet.querySelector('.account-group').appendChild(userScoreDisplay);
     });

@@ -1,25 +1,23 @@
 import './popup.scss';
 
-const OPTION_ALWAYS_DISPLAY_CRYPTO_SCORE_ON_PROFILES_CHECKBOX = document.getElementsByName(
-  'alwaysDisplayCryptoScoreOnProfiles'
-)[0];
+const SETTINGS_SELECTS = [
+  ['#cluster-options-select', 'clusterToDisplay'],
+  ['#display-settings-select', 'displaySetting']
+];
 
-chrome.storage.sync.get(['alwaysDisplayCryptoScoreOnProfiles'], result => {
-  console.log('result', result, result.alwaysDisplayCryptoScoreOnProfiles);
-  OPTION_ALWAYS_DISPLAY_CRYPTO_SCORE_ON_PROFILES_CHECKBOX.checked =
-    result.alwaysDisplayCryptoScoreOnProfiles;
+SETTINGS_SELECTS.forEach(([selector, name]) => {
+  const element = document.querySelector(selector);
+
+  chrome.storage.sync.get([name], result => {
+    console.log('result', result);
+    element.querySelector(`option[value="${result[name]}"]`).selected = true;
+  });
+
+  element.addEventListener('change', event => {
+    const newValue = event.target.value;
+
+    chrome.storage.sync.set({
+      [name]: newValue
+    });
+  });
 });
-
-OPTION_ALWAYS_DISPLAY_CRYPTO_SCORE_ON_PROFILES_CHECKBOX.onclick = event => {
-  const newValue = event.target.checked;
-  console.log('always display cry changed', newValue);
-
-  chrome.storage.sync.set(
-    {
-      alwaysDisplayCryptoScoreOnProfiles: newValue
-    },
-    function() {
-      console.log('set value to', newValue);
-    }
-  );
-};

@@ -1,36 +1,77 @@
+class HIVE_API_FETCH_DATA_STATUS {
+  static SUCCESS = 'success';
+  static ERROR = 'error';
+}
+
 export class HiveAPI {
   cache;
   host = '';
+  defaultCluster = 'Crypto';
 
-  constructor(_host, _cache) {
+  constructor(_host, _defaultCluster, _cache) {
     this.host = _host;
+    this.defaultCluster = _defaultCluster;
     this.cache = _cache;
   }
 
-  async getTwitterUserScore(id) {
-    const cacheKey = this.getUserScoreStoringCacheKey(id);
-    const cachedScore = await this.cache.get(cacheKey);
+  async getTwitterUserScore(id, cluster = this.defaultCluster) {
+    const { data, status } = await this.getTwitterUserData(id);
 
-    if (typeof cachedScore !== 'undefined' && cachedScore !== null) {
-      return cachedScore;
+    let score = 0;
+    let name = cluster;
+
+    if (status === HIVE_API_FETCH_DATA_STATUS.SUCCESS) {
+      if (cluster === 'Highest') {
+        const highestScoreCluster = data.clusters.slice().sort((a, b) => b.score - a.score)[0];
+
+        name = highestScoreCluster.abbr;
+        score = highestScoreCluster.score;
+      } else {
+        score = data.clusters.find(item => item.abbr === cluster).score;
+      }
     }
 
-    let score;
+    return { name, score };
+  }
+
+  async getTwitterUserClusters(id) {
+    const { data, status } = await this.getTwitterUserData(id);
+
+    let clusters = [];
+
+    if (status === HIVE_API_FETCH_DATA_STATUS.SUCCESS) {
+      clusters = data.clusters;
+    }
+
+    return clusters;
+  }
+
+  async getTwitterUserData(id) {
+    const cacheKey = this.getUserScoreStoringCacheKey(id);
+    const cachedData = await this.cache.get(cacheKey);
+
+    if (typeof cachedData !== 'undefined' && cachedData !== null) {
+      return cachedData;
+    }
+
+    let status, data;
 
     try {
       const response = await fetch(`${this.host}/api/top-people/${id}`);
-      const json = await response.json();
-
-      const allCryptoCluster = json.clusters[0];
-
-      score = allCryptoCluster.score;
+      data = await response.json();
+      status = HIVE_API_FETCH_DATA_STATUS.SUCCESS;
     } catch (error) {
-      score = 0;
+      status = HIVE_API_FETCH_DATA_STATUS.ERROR;
     }
 
-    await this.cache.save(cacheKey, score);
+    const fetchingInfo = {
+      data,
+      status
+    };
 
-    return score;
+    await this.cache.save(cacheKey, fetchingInfo);
+
+    return fetchingInfo;
   }
 
   getUserScoreStoringCacheKey(id) {

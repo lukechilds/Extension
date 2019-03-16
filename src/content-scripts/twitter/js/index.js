@@ -12,7 +12,9 @@ const observeDOM = (() => {
   return (element, callback) => {
     if (MutationObserver) {
       const observer = new MutationObserver(mutations => {
-        if (mutations[0].addedNodes.length || mutations[0].removedNodes.length) callback();
+        if (mutations[0].addedNodes.length || mutations[0].removedNodes.length) {
+          callback();
+        }
       });
 
       observer.observe(element, { childList: true, subtree: true });
@@ -23,23 +25,23 @@ const observeDOM = (() => {
   };
 })();
 
-function isOptionEnabled(name) {
+function getOptionValue(name) {
   return new Promise(resolve => {
     chrome.storage.sync.get([name], result => resolve(result[name]));
   });
 }
 
 (async () => {
+  const clusterToDisplay = await getOptionValue('clusterToDisplay');
+
   const cache = new CustomCache();
-  const api = new HiveAPI(CONFIG.API_HOST, cache);
+  const api = new HiveAPI(CONFIG.API_HOST, clusterToDisplay, cache);
   const twitterProfileScore = new TwitterProfileScoreExtension(api);
   const twitterTweetsAuthorScoreExtension = new TwitterTweetsAuthorScoreExtension(api);
 
   async function runExtensions() {
-    if (await isOptionEnabled('alwaysDisplayCryptoScoreOnProfiles')) {
-      await twitterProfileScore.start();
-      await twitterTweetsAuthorScoreExtension.start();
-    }
+    await twitterProfileScore.start();
+    await twitterTweetsAuthorScoreExtension.start();
   }
 
   observeDOM(document.getElementsByTagName('body')[0], runExtensions);
