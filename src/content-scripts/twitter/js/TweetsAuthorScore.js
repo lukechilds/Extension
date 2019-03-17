@@ -1,4 +1,7 @@
+import { ProfilePopup } from './ProfilePopup';
+
 const TWEET_AUTHOR_SCORE_EXTENSION_CLASS_NAME = 'HiveExtension-Twitter_tweet-author-score';
+const TWEETS_SELECTOR = '.tweet';
 
 export class TwitterTweetsAuthorScoreExtension {
   api;
@@ -8,42 +11,53 @@ export class TwitterTweetsAuthorScoreExtension {
   }
 
   async start() {
-    document.querySelectorAll('.stream .stream-items .stream-item .tweet').forEach(async tweet => {
+    this.addScoreToTweetFooter();
+  }
+
+  async addScoreToTweetFooter() {
+    document.querySelectorAll(TWEETS_SELECTOR).forEach(async tweet => {
       const processedClassName = `${TWEET_AUTHOR_SCORE_EXTENSION_CLASS_NAME}-processed`;
 
       if (tweet.classList.contains(processedClassName)) {
-        // console.log('ALREADY HAS TWEET AUTHOR SCORE');
         return;
       }
-
-      // console.log('NEW TWEET')
 
       tweet.classList.add(processedClassName);
 
       const authorId = tweet.getAttribute('data-user-id');
 
-      const { score: userScore } = await this.api.getTwitterUserScore(authorId);
-
-      const tweetIsThread =
-        Boolean(tweet.querySelector('.self-thread-tweet-cta')) ||
-        tweet.parentElement.parentElement.classList.contains('ThreadedConversation-tweet');
-      const isDarkTheme = Boolean(
-        document.querySelector('.js-nightmode-icon.Icon--crescentFilled')
-      );
-
-      let threadClass = TWEET_AUTHOR_SCORE_EXTENSION_CLASS_NAME + '_display-in-thread';
-
-      if (isDarkTheme) {
-        threadClass += '-dark';
-      }
+      const { name: clusterName, score: userScore } = await this.api.getTwitterUserScore(authorId);
 
       const userScoreDisplay = document.createElement('div');
       userScoreDisplay.classList.add(TWEET_AUTHOR_SCORE_EXTENSION_CLASS_NAME);
-      userScoreDisplay.innerHTML = `<b class="${TWEET_AUTHOR_SCORE_EXTENSION_CLASS_NAME}_display ${
-        tweetIsThread ? threadClass : ''
-      }">${Math.round(userScore)}</b>`;
+      userScoreDisplay.classList.add('ProfileTweet-action');
+      userScoreDisplay.innerHTML = `<button class="${TWEET_AUTHOR_SCORE_EXTENSION_CLASS_NAME}_display ProfileTweet-actionButton js-tooltip" data-original-title="${clusterName} Score">
 
-      tweet.querySelector('.account-group').appendChild(userScoreDisplay);
+      <div class="IconContainer">
+          <span class="Icon Icon--medium">
+            <svg viewBox="0 0 36 36" class="${TWEET_AUTHOR_SCORE_EXTENSION_CLASS_NAME}_display_icon">
+              <use xlink:href="#hive-icon" />
+            </svg>
+          </span>
+        </div>
+
+      <span class="ProfileTweet-actionCount">
+        <span class="${TWEET_AUTHOR_SCORE_EXTENSION_CLASS_NAME}_display_score">${Math.round(
+        userScore
+      )}</span>
+      </span>
+
+      </button>
+      `;
+
+      const popup = new ProfilePopup(authorId, this.api);
+      popup.showOnClick(userScoreDisplay);
+
+      const actionList = tweet.querySelector('.ProfileTweet-actionList');
+
+      if (actionList) {
+        actionList.appendChild(userScoreDisplay);
+      }
     });
   }
 }

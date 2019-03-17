@@ -1,29 +1,43 @@
 .HiveExtension-Twitter {
+	&_profile-score {
+		cursor: pointer;
+	}
+
     &_tweet-author-score {
-		color: #4ab3f4;
-		text-align: center;
-		display: block;
-		float: left;
-		margin-top: 55px;
-		margin-left: -58px;
-		position: absolute;
-		width: 48px;
-		z-index: 2;
+		position: relative;
 
 		&_display {
-			&-in-thread {
-				background: white;
+			$root: &;
 
-				.js-navigation-active.stream-item &, .tweet:hover & {
-					background: #f5f8fa;
+			color: #657786;
+
+			$highlightColor: #817aff;
+
+			&_score {
+				display: inline-block;
+				font-size: 12px;
+				font-weight: bold;
+				line-height: 1;
+				margin-left: 6px;
+				position: relative;
+				vertical-align: text-bottom;
+			}
+
+			&_icon {
+				fill: #657786;
+				overflow: visible;
+				width: 18px;
+				height: 18px;
+				margin-top: 2px;
+			}
+
+			&:hover {
+				#{$root}_score {
+					color: $highlightColor;
 				}
 
-				&-dark {
-					background: #15202b;
-
-					.js-navigation-active.stream-item &, .tweet:hover & {
-						background: #15202b;
-					}
+				#{$root}_icon {
+					fill: $highlightColor;;
 				}
 			}
 		}
@@ -32,10 +46,65 @@
     &_popup {
         &-profile {
             position: absolute;
-            background: white;
-            padding: 30px;
+            background: #fafbfd;
+            padding: 10px;
 			box-shadow: 0 1px 3px 0 rgba(0,0,0,0.25);
-			width: 250px;
+			width: 300px;
+			z-index: 1000;
+			font-size: 14px;
+			line-height: 19.25px;
+
+			&_title {
+				color: #545454;
+				margin: 0;
+				display: block;
+				font-size: 1.17em;
+				font-weight: bold;
+			}
+
+			&_content {
+				border: 1px solid #eeedff;
+				padding: 1rem;
+				background-color: white;
+				border-radius: 6px;
+			}
+
+			&_followers {
+				display: flex;
+				justify-content: space-between;
+				margin-top: 24px;
+				text-align: center;
+				overflow: scroll;
+				margin-top: 10px;
+
+				&_follower {
+					font-weight: 600;
+					background-color: white;
+					padding: 12px 16px;
+					margin-right: 8px;
+					border-radius: 6px;
+					border: 1px solid #eeedff;
+
+					&_image {
+						height: 40px;
+						width: 40px;
+						overflow: hidden;
+    					border-radius: 50%;
+					}
+
+					&_name {
+						width: 60px;
+						margin-top: 8px;
+						font-size: 10px;
+						overflow: hidden;
+						text-overflow: ellipsis;
+					}
+				}
+			}
+
+			&-hidden {
+				visibility: hidden;
+			}
 
 			&_cluster-score {
 				position: relative;
@@ -178,4 +247,8 @@
 			}
 		}
     }
+}
+
+.ProfileTweet-action--dm {
+	min-width: 60px;
 }
