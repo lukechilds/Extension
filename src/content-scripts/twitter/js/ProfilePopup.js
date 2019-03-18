@@ -1,5 +1,7 @@
 import { CONFIG } from '../../../config';
 
+let openPopupsCloseHandlers = [];
+
 export class ProfilePopup {
   api;
   userTwitterId;
@@ -28,17 +30,28 @@ export class ProfilePopup {
       const removePopupElement = () => {
         displayElement.querySelector(`.${POPUP_CLASS}`).remove();
         document.removeEventListener('click', closePopup);
+
+        if (openPopupsCloseHandlers.length === 1) {
+          openPopupsCloseHandlers = [];
+        }
+      };
+
+      const closeAllPopups = () => {
+        openPopupsCloseHandlers.forEach(popupCloseHandler => popupCloseHandler(event));
+        openPopupsCloseHandlers = [];
       };
 
       event.stopPropagation();
 
       if (displayElement.querySelector(`.${POPUP_CLASS}`)) {
         if (popupNode && (event.target !== popupNode && !popupNode.contains(event.target))) {
-          removePopupElement();
+          closeAllPopups();
         }
 
         return;
       }
+
+      closeAllPopups();
 
       const roundedAllCryptoScore = Math.round(allCryptoScore);
       const cryptoPercentage = Math.floor((roundedAllCryptoScore / CONFIG.MAX_SCORE) * 100);
@@ -152,6 +165,8 @@ export class ProfilePopup {
         };
 
         document.addEventListener('click', closePopup);
+
+        openPopupsCloseHandlers.push(closePopup);
       }, 0);
     };
 
