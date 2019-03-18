@@ -1,4 +1,5 @@
 import { ProfilePopup } from './ProfilePopup';
+import { CONFIG } from '../../../config';
 
 const TWEET_AUTHOR_SCORE_CLASS = 'HiveExtension-Twitter_tweet-author-score';
 const TWEET_INDIVIDUAL_SCORE_CLASS = 'HiveExtension-Twitter_tweet-individual-score';
@@ -74,7 +75,11 @@ export class TwitterTweetsAuthorScoreExtension {
 
       const authorId = tweet.getAttribute('data-user-id');
 
-      const { name: clusterName, score: userScore } = await this._api.getTwitterUserScore(authorId);
+      const {
+        name: clusterName,
+        score: userScore,
+        indexed: userIndexed
+      } = await this._api.getTwitterUserScore(authorId);
 
       const tweetIsThread =
         Boolean(tweet.querySelector('.self-thread-tweet-cta')) ||
@@ -86,16 +91,24 @@ export class TwitterTweetsAuthorScoreExtension {
         threadClass += '-dark';
       }
 
-      const roundedScore = Math.round(userScore);
+      let roundedScore = CONFIG.NO_SCORE_TEXT;
+      let tooltip = CONFIG.NO_SCORE_TOOLTIP;
+
+      if (userIndexed) {
+        roundedScore = Math.round(userScore);
+        tooltip = `${clusterName} Score ${roundedScore}`;
+      }
 
       const userScoreDisplay = document.createElement('div');
       userScoreDisplay.classList.add(TWEET_AUTHOR_SCORE_CLASS);
       userScoreDisplay.innerHTML = `<b class="${TWEET_AUTHOR_SCORE_CLASS}_display ${
         tweetIsThread ? threadClass : ''
-      } js-tooltip" data-original-title="${clusterName} Score ${roundedScore}">${roundedScore}</b>`;
+      } js-tooltip" data-original-title="${tooltip}">${roundedScore}</b>`;
 
-      const popup = new ProfilePopup(authorId, this._api, this._settings);
-      popup.showOnClick(userScoreDisplay);
+      if (userIndexed) {
+        const popup = new ProfilePopup(authorId, this._api, this._settings);
+        popup.showOnClick(userScoreDisplay);
+      }
 
       const accountGroup = tweet.querySelector('.stream-item-header');
 

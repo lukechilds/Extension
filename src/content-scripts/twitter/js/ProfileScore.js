@@ -39,27 +39,38 @@ export class TwitterProfileScoreExtension {
 
     const {
       score: defaultClusterScore,
-      name: defaultClusterName
+      name: defaultClusterName,
+      indexed: accountIndexed
     } = await this._api.getTwitterUserScore(userTwitterId);
 
-    this.displayUserScore(defaultClusterScore, defaultClusterName);
+    this.displayUserScore(defaultClusterScore, defaultClusterName, accountIndexed);
   }
 
-  async displayUserScore(defaultClusterScore, defaultClusterName) {
-    const roundedDefaultClusterScore = Math.round(defaultClusterScore);
+  async displayUserScore(defaultClusterScore, defaultClusterName, accountIndexed) {
+    const roundedDefaultClusterScore = accountIndexed
+      ? Math.round(defaultClusterScore)
+      : CONFIG.NO_SCORE_TEXT;
+
+    let tooltip = CONFIG.NO_SCORE_TOOLTIP;
+
+    if (accountIndexed) {
+      tooltip = `${defaultClusterName} Score ${roundedDefaultClusterScore}`;
+    }
 
     const displayElement = document.createElement('div');
     displayElement.classList.add('ProfileNav-item');
     displayElement.classList.add(PROFILE_SCORE_EXTENSION_CLASS_NAME);
     displayElement.innerHTML = `
-            <div class="ProfileNav-stat ProfileNav-stat--link u-borderUserColor u-textCenter js-tooltip js-nav u-textUserColor" href="#" data-original-title="${defaultClusterName} Score ${roundedDefaultClusterScore}">
+            <div class="ProfileNav-stat ProfileNav-stat--link u-borderUserColor u-textCenter js-tooltip js-nav u-textUserColor" href="#" data-original-title="${tooltip}">
                   <span class="ProfileNav-label">${defaultClusterName} Score</span>
                   <span class="ProfileNav-value" data-count="${roundedDefaultClusterScore}" data-is-compact="false">${roundedDefaultClusterScore}</span>
             </div>
         `;
 
-    const popup = new ProfilePopup(this.getUserId(), this._api, this._settings);
-    popup.showOnClick(displayElement);
+    if (accountIndexed) {
+      const popup = new ProfilePopup(this.getUserId(), this._api, this._settings);
+      popup.showOnClick(displayElement);
+    }
 
     document
       .querySelector('.ProfileNav-item:nth-of-type(4)')

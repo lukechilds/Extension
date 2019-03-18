@@ -19,6 +19,7 @@ export class HiveAPI {
 
     let score = 0;
     let name = cluster;
+    let indexed = false;
 
     if (status === HIVE_API_FETCH_DATA_STATUS.SUCCESS) {
       if (cluster === 'Highest') {
@@ -29,9 +30,11 @@ export class HiveAPI {
       } else {
         score = data.clusters.find(item => item.abbr === cluster).score;
       }
+
+      indexed = true;
     }
 
-    return { name, score };
+    return { name, score, indexed };
   }
 
   async getTwitterUserClusters(id) {

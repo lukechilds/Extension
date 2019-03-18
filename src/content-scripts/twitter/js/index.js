@@ -1,7 +1,7 @@
 import '../styles/twitter.scss';
 import { CustomCache } from './CustomCache';
 import { HiveAPI } from './HiveAPI';
-import { TwitterProfileScoreExtension } from './TwitterProfileScore';
+import { TwitterProfileScoreExtension } from './ProfileScore';
 import { TwitterTweetsAuthorScoreExtension } from './TweetsAuthorScore';
 import { CONFIG } from '../../../config';
 import { ExtensionIcons } from './Icons';
