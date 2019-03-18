@@ -17,18 +17,31 @@ export class ProfilePopup {
 
     const clusters = await this.api.getTwitterUserClusters(this.userTwitterId);
 
-    const displayPopup = () => {
+    let popupNode, closePopup;
+
+    const displayPopup = event => {
       const POPUP_CLASS = 'HiveExtension-Twitter_popup-profile';
       const POPUP_HIDDEN_CLASS = `${POPUP_CLASS}-hidden`;
 
+      const removePopupElement = () => {
+        displayElement.querySelector(`.${POPUP_CLASS}`).remove();
+        document.removeEventListener('click', closePopup);
+      };
+
+      event.stopPropagation();
+
       if (displayElement.querySelector(`.${POPUP_CLASS}`)) {
+        if (popupNode && (event.target !== popupNode && !popupNode.contains(event.target))) {
+          removePopupElement();
+        }
+
         return;
       }
 
       const roundedAllCryptoScore = Math.round(allCryptoScore);
       const cryptoPercentage = Math.floor((roundedAllCryptoScore / CONFIG.MAX_SCORE) * 100);
 
-      const popupNode = document.createElement('div');
+      popupNode = document.createElement('div');
       popupNode.classList.add(POPUP_CLASS);
       popupNode.classList.add(POPUP_HIDDEN_CLASS);
 
@@ -121,14 +134,14 @@ export class ProfilePopup {
       popupNode.classList.remove(POPUP_HIDDEN_CLASS);
 
       setTimeout(() => {
-        const closePopup = event => {
+        closePopup = event => {
           if (event.target === popupNode || popupNode.contains(event.target)) {
             return;
           }
 
-          displayElement.querySelector(`.${POPUP_CLASS}`).remove();
+          event.stopPropagation();
 
-          document.removeEventListener('click', closePopup);
+          removePopupElement();
         };
 
         document.addEventListener('click', closePopup);

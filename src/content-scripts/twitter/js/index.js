@@ -5,6 +5,7 @@ import { TwitterProfileScoreExtension } from './TwitterProfileScore';
 import { TwitterTweetsAuthorScoreExtension } from './TweetsAuthorScore';
 import { CONFIG } from '../../../config';
 import { ExtensionIcons } from './Icons';
+import { ExtensionSettings } from './Settings';
 
 const observeDOM = (() => {
   const MutationObserver = window.MutationObserver || window.WebKitMutationObserver,
@@ -37,8 +38,10 @@ function getOptionValue(name) {
 
   const cache = new CustomCache();
   const api = new HiveAPI(CONFIG.API_HOST, clusterToDisplay, cache);
+  const settings = new ExtensionSettings();
+
   const twitterProfileScore = new TwitterProfileScoreExtension(api);
-  const twitterTweetsAuthorScoreExtension = new TwitterTweetsAuthorScoreExtension(api);
+  const twitterTweetsAuthorScoreExtension = new TwitterTweetsAuthorScoreExtension(api, settings);
   const icons = new ExtensionIcons();
 
   async function runExtensions() {
