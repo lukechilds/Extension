@@ -41,7 +41,10 @@ const base = {
     ]
   },
   plugins: [
-    new CopyPlugin([{ from: './src/manifest.json', to: './manifest.json' }]),
+    new CopyPlugin([
+      { from: './src/manifest.json', to: './manifest.json' },
+      { from: './src/assets/images', to: './images' }
+    ]),
     new HtmlWebpackPlugin({
       template: './src/popup/popup.html',
       chunks: ['popup']
