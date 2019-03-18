@@ -1,4 +1,4 @@
-import { CONFIG } from '../../../config';
+import { CONFIG, MESSAGES } from '../../../config';
 
 let openPopupsCloseHandlers = [];
 
@@ -168,6 +168,18 @@ export class ProfilePopup {
 
         openPopupsCloseHandlers.push(closePopup);
       }, 0);
+
+      let action = 'popup-opened-in-tweet-stream';
+
+      if (displayElement.classList.contains('ProfileNav-item')) {
+        action = 'popup-opened-in-profile-header';
+      }
+
+      chrome.runtime.sendMessage({
+        type: MESSAGES.TRACK_EVENT,
+        category: 'plugin-interactions',
+        action
+      });
     };
 
     displayElement.addEventListener('click', displayPopup, false);
