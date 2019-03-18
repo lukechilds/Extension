@@ -74,7 +74,7 @@ export class TwitterTweetsAuthorScoreExtension {
 
       const authorId = tweet.getAttribute('data-user-id');
 
-      const { score: userScore } = await this.api.getTwitterUserScore(authorId);
+      const { name: clusterName, score: userScore } = await this.api.getTwitterUserScore(authorId);
 
       const tweetIsThread =
         Boolean(tweet.querySelector('.self-thread-tweet-cta')) ||
@@ -86,11 +86,13 @@ export class TwitterTweetsAuthorScoreExtension {
         threadClass += '-dark';
       }
 
+      const roundedScore = Math.round(userScore);
+
       const userScoreDisplay = document.createElement('div');
       userScoreDisplay.classList.add(TWEET_AUTHOR_SCORE_CLASS);
       userScoreDisplay.innerHTML = `<b class="${TWEET_AUTHOR_SCORE_CLASS}_display ${
         tweetIsThread ? threadClass : ''
-      }">${Math.round(userScore)}</b>`;
+      } js-tooltip" data-original-title="${clusterName} Score ${roundedScore}">${roundedScore}</b>`;
 
       const popup = new ProfilePopup(authorId, this.api);
       popup.showOnClick(userScoreDisplay);
