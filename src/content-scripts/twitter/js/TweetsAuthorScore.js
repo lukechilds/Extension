@@ -5,12 +5,12 @@ const TWEET_INDIVIDUAL_SCORE_CLASS = 'HiveExtension-Twitter_tweet-individual-sco
 const TWEETS_SELECTOR = '.tweet';
 
 export class TwitterTweetsAuthorScoreExtension {
-  api;
-  settings;
+  _api;
+  _settings;
 
   constructor(api, settings) {
-    this.api = api;
-    this.settings = settings;
+    this._api = api;
+    this._settings = settings;
   }
 
   async start() {
@@ -29,7 +29,7 @@ export class TwitterTweetsAuthorScoreExtension {
 
       const authorId = tweet.getAttribute('data-user-id');
 
-      const { name: clusterName, score: userScore } = await this.api.getTwitterUserScore(authorId);
+      const { name: clusterName, score: userScore } = await this._api.getTwitterUserScore(authorId);
 
       const userScoreDisplay = document.createElement('div');
       userScoreDisplay.classList.add(TWEET_INDIVIDUAL_SCORE_CLASS);
@@ -51,7 +51,7 @@ export class TwitterTweetsAuthorScoreExtension {
       </button>
       `;
 
-      const popup = new ProfilePopup(authorId, this.api);
+      const popup = new ProfilePopup(authorId, this._api, this._settings);
       popup.showOnClick(userScoreDisplay);
 
       const actionList = tweet.querySelector('.ProfileTweet-actionList');
@@ -74,7 +74,7 @@ export class TwitterTweetsAuthorScoreExtension {
 
       const authorId = tweet.getAttribute('data-user-id');
 
-      const { name: clusterName, score: userScore } = await this.api.getTwitterUserScore(authorId);
+      const { name: clusterName, score: userScore } = await this._api.getTwitterUserScore(authorId);
 
       const tweetIsThread =
         Boolean(tweet.querySelector('.self-thread-tweet-cta')) ||
@@ -82,7 +82,7 @@ export class TwitterTweetsAuthorScoreExtension {
 
       let threadClass = TWEET_AUTHOR_SCORE_CLASS + '_display-in-thread';
 
-      if (this.settings.isDarkTheme) {
+      if (this._settings.isDarkTheme) {
         threadClass += '-dark';
       }
 
@@ -94,7 +94,7 @@ export class TwitterTweetsAuthorScoreExtension {
         tweetIsThread ? threadClass : ''
       } js-tooltip" data-original-title="${clusterName} Score ${roundedScore}">${roundedScore}</b>`;
 
-      const popup = new ProfilePopup(authorId, this.api);
+      const popup = new ProfilePopup(authorId, this._api, this._settings);
       popup.showOnClick(userScoreDisplay);
 
       const accountGroup = tweet.querySelector('.stream-item-header');

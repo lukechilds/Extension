@@ -40,7 +40,7 @@ function getOptionValue(name) {
   const api = new HiveAPI(CONFIG.API_HOST, clusterToDisplay, cache);
   const settings = new ExtensionSettings();
 
-  const twitterProfileScore = new TwitterProfileScoreExtension(api);
+  const twitterProfileScore = new TwitterProfileScoreExtension(api, settings);
   const twitterTweetsAuthorScoreExtension = new TwitterTweetsAuthorScoreExtension(api, settings);
   const icons = new ExtensionIcons();
 

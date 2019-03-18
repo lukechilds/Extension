@@ -8,10 +8,12 @@ const PROFILE_SIDEBAR_SELECTOR = '.ProfileSidebar';
 const PROFILE_NAV_SELECTOR = '.ProfileNav';
 
 export class TwitterProfileScoreExtension {
-  api;
+  _api;
+  _settings;
 
-  constructor(_api) {
-    this.api = _api;
+  constructor(api, settings) {
+    this._api = api;
+    this._settings = settings;
   }
 
   getUserId() {
@@ -38,7 +40,7 @@ export class TwitterProfileScoreExtension {
     const {
       score: defaultClusterScore,
       name: defaultClusterName
-    } = await this.api.getTwitterUserScore(userTwitterId);
+    } = await this._api.getTwitterUserScore(userTwitterId);
 
     this.displayUserScore(defaultClusterScore, defaultClusterName);
   }
@@ -56,7 +58,7 @@ export class TwitterProfileScoreExtension {
             </div>
         `;
 
-    const popup = new ProfilePopup(this.getUserId(), this.api);
+    const popup = new ProfilePopup(this.getUserId(), this._api, this._settings);
     popup.showOnClick(displayElement);
 
     document

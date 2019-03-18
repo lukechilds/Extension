@@ -3,10 +3,12 @@ import { CONFIG } from '../../../config';
 export class ProfilePopup {
   api;
   userTwitterId;
+  settings;
 
-  constructor(userTwitterId, api) {
+  constructor(userTwitterId, api, settings) {
     this.userTwitterId = userTwitterId;
     this.api = api;
+    this.settings = settings;
   }
 
   async showOnClick(displayElement) {
@@ -43,6 +45,11 @@ export class ProfilePopup {
 
       popupNode = document.createElement('div');
       popupNode.classList.add(POPUP_CLASS);
+
+      if (this.settings.isDarkTheme) {
+        popupNode.classList.add(`${POPUP_CLASS}-dark`);
+      }
+
       popupNode.classList.add(POPUP_HIDDEN_CLASS);
 
       let clustersHTML = ``;

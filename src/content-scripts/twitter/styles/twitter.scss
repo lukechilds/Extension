@@ -1,3 +1,100 @@
+.radial-progress {
+  $circle-size: 160px;
+  $circle-background: #d6dadc;
+  $circle-color: #8784ff;
+  $inset-size: $circle-size - 20px;
+  $inset-color: #fbfbfb;
+  $transition-length: 1s;
+  $percentage-font-size: 22px;
+  $percentage-text-width: 57px;
+
+  margin: 30px auto;
+  width: $circle-size;
+  height: $circle-size;
+
+  background-color: $circle-background;
+  border-radius: 50%;
+
+  .circle {
+    .mask,
+    .fill,
+    .shadow {
+      width: $circle-size;
+      height: $circle-size;
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .mask,
+    .fill {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 50%;
+    }
+
+    .mask {
+      clip: rect(0px, $circle-size, $circle-size, $circle-size/2);
+
+      .fill {
+        clip: rect(0px, $circle-size/2, $circle-size, 0px);
+        background-color: $circle-color;
+      }
+    }
+  }
+
+  $i: 0;
+  $increment: 180deg / 100;
+
+  @for $i from 1 through 100 {
+    &[data-progress="#{$i}"] {
+      .circle {
+        .mask.full,
+        .fill {
+          transform: rotate($increment * $i);
+        }
+        .fill.fix {
+          transform: rotate($increment * $i * 2);
+        }
+      }
+    }
+  }
+
+  .circle_inset {
+    width: $inset-size;
+    height: $inset-size;
+    position: absolute;
+    margin-left: ($circle-size - $inset-size)/2;
+    margin-top: ($circle-size - $inset-size)/2;
+
+    background-color: $inset-color;
+    border-radius: 50%;
+
+    .percentage {
+      .numbers {
+        $width: 90px;
+        $height: 68px;
+
+        text-align: center;
+        margin-left: ($inset-size - $width) / 2;
+        width: $width;
+        height: $height;
+        margin-top: ($inset-size - $height) / 2;
+
+        &_main {
+          width: $percentage-text-width;
+          display: inline-block;
+          vertical-align: top;
+          text-align: center;
+          font-weight: 800;
+          font-size: $percentage-font-size;
+          font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+          color: black;
+        }
+      }
+    }
+  }
+}
+
 .HiveExtension-Twitter {
   &_profile-score {
     cursor: pointer;
@@ -81,6 +178,8 @@
 
   &_popup {
     &-profile {
+      $root: &;
+
       position: absolute;
       background: #fafbfd;
       padding: 10px;
@@ -91,6 +190,29 @@
       line-height: 19.25px;
       user-select: none;
       color: #14171a;
+      text-align: left;
+
+      &-dark {
+        color: #ffffff;
+        background: #10171e;
+
+        #{$root}_title {
+          color: white;
+        }
+
+        #{$root}_content, #{$root}_followers_follower {
+          background-color: #15202b;
+          border-color: #38444d;
+        }
+
+        .circle_inset {
+          background: #15202b;
+        }
+
+        .radial-progress .circle_inset .percentage .numbers_main {
+          color: white;
+        }
+      }
 
       &_title {
         color: #545454;
@@ -188,103 +310,6 @@
             right: 0;
             border: 1px solid white;
           }
-        }
-      }
-    }
-  }
-}
-
-.radial-progress {
-  $circle-size: 160px;
-  $circle-background: #d6dadc;
-  $circle-color: #8784ff;
-  $inset-size: $circle-size - 20px;
-  $inset-color: #fbfbfb;
-  $transition-length: 1s;
-  $percentage-font-size: 22px;
-  $percentage-text-width: 57px;
-
-  margin: 30px auto;
-  width: $circle-size;
-  height: $circle-size;
-
-  background-color: $circle-background;
-  border-radius: 50%;
-
-  .circle {
-    .mask,
-    .fill,
-    .shadow {
-      width: $circle-size;
-      height: $circle-size;
-      position: absolute;
-      border-radius: 50%;
-    }
-
-    .mask,
-    .fill {
-      -webkit-backface-visibility: hidden;
-      backface-visibility: hidden;
-      border-radius: 50%;
-    }
-
-    .mask {
-      clip: rect(0px, $circle-size, $circle-size, $circle-size/2);
-
-      .fill {
-        clip: rect(0px, $circle-size/2, $circle-size, 0px);
-        background-color: $circle-color;
-      }
-    }
-  }
-
-  $i: 0;
-  $increment: 180deg / 100;
-
-  @for $i from 1 through 100 {
-    &[data-progress="#{$i}"] {
-      .circle {
-        .mask.full,
-        .fill {
-          transform: rotate($increment * $i);
-        }
-        .fill.fix {
-          transform: rotate($increment * $i * 2);
-        }
-      }
-    }
-  }
-
-  .circle_inset {
-    width: $inset-size;
-    height: $inset-size;
-    position: absolute;
-    margin-left: ($circle-size - $inset-size)/2;
-    margin-top: ($circle-size - $inset-size)/2;
-
-    background-color: $inset-color;
-    border-radius: 50%;
-
-    .percentage {
-      .numbers {
-        $width: 90px;
-        $height: 68px;
-
-        text-align: center;
-        margin-left: ($inset-size - $width) / 2;
-        width: $width;
-        height: $height;
-        margin-top: ($inset-size - $height) / 2;
-
-        &_main {
-          width: $percentage-text-width;
-          display: inline-block;
-          vertical-align: top;
-          text-align: center;
-          font-weight: 800;
-          font-size: $percentage-font-size;
-          font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
-          color: black;
         }
       }
     }
