@@ -101,7 +101,6 @@
   }
 
   &_tweet-author-score {
-    color: #4ab3f4;
     text-align: center;
     display: block;
     float: left;
@@ -115,6 +114,11 @@
       display: block;
       position: relative;
       user-select: none;
+      color: #657786;
+
+      &:hover {
+        color: #4ab3f4;
+      }
 
       &-in-thread {
         background: white;

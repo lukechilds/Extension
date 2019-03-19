@@ -76,14 +76,17 @@ export class TwitterTweetsAuthorScoreExtension {
       const authorId = tweet.getAttribute('data-user-id');
 
       const {
-        name: clusterName,
+        name: defaultClusterName,
         score: userScore,
-        indexed: userIndexed
+        rank: defaultClusterRank,
+        indexed: accountIndexed
       } = await this._api.getTwitterUserScore(authorId);
 
       const tweetIsThread =
         Boolean(tweet.querySelector('.self-thread-tweet-cta')) ||
-        tweet.parentElement.parentElement.classList.contains('ThreadedConversation-tweet');
+        tweet.parentElement.parentElement.classList.contains('ThreadedConversation-tweet') ||
+        tweet.parentElement.classList.contains('conversation-first-visible-tweet') ||
+        tweet.classList.contains('conversation-tweet');
 
       let threadClass = TWEET_AUTHOR_SCORE_CLASS + '_display-in-thread';
 
@@ -91,21 +94,37 @@ export class TwitterTweetsAuthorScoreExtension {
         threadClass += '-dark';
       }
 
-      let roundedScore = CONFIG.NO_SCORE_TEXT;
+      const option = await this._settings.getOptionValue('displaySetting');
+
+      let value = CONFIG.NO_SCORE_TEXT;
       let tooltip = CONFIG.NO_SCORE_TOOLTIP;
 
-      if (userIndexed) {
-        roundedScore = Math.round(userScore);
-        tooltip = `${clusterName} Score ${roundedScore}`;
+      if (
+        accountIndexed &&
+        ['showRanksWithScoreFallback', 'showRanks'].includes(option) &&
+        defaultClusterRank
+      ) {
+        value = `${defaultClusterRank}`;
+        tooltip = `${defaultClusterName} Rank ${defaultClusterRank}`;
+      } else if (accountIndexed && option !== 'showRanks') {
+        value = Math.round(userScore);
+        tooltip = `${defaultClusterName} Score ${value}`;
+      } else if (option === 'showRanks' && !accountIndexed) {
+        value = '';
+        tooltip = '';
+      }
+
+      if (!value || !tooltip) {
+        return;
       }
 
       const userScoreDisplay = document.createElement('div');
       userScoreDisplay.classList.add(TWEET_AUTHOR_SCORE_CLASS);
       userScoreDisplay.innerHTML = `<b class="${TWEET_AUTHOR_SCORE_CLASS}_display ${
         tweetIsThread ? threadClass : ''
-      } js-tooltip" data-original-title="${tooltip}">${roundedScore}</b>`;
+      } js-tooltip" data-original-title="${tooltip}">${value}</b>`;
 
-      if (userIndexed) {
+      if (accountIndexed) {
         const popup = new ProfilePopup(authorId, this._api, this._settings);
         popup.showOnClick(userScoreDisplay);
       }

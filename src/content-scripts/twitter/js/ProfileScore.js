@@ -40,36 +40,65 @@ export class TwitterProfileScoreExtension {
     const {
       score: defaultClusterScore,
       name: defaultClusterName,
+      rank: defaultClusterRank,
       indexed: accountIndexed
     } = await this._api.getTwitterUserScore(userTwitterId);
 
-    this.displayUserScore(defaultClusterScore, defaultClusterName, accountIndexed);
+    this.displayUserScore(
+      defaultClusterScore,
+      defaultClusterRank,
+      defaultClusterName,
+      accountIndexed
+    );
   }
 
-  async displayUserScore(defaultClusterScore, defaultClusterName, accountIndexed) {
-    const roundedDefaultClusterScore = accountIndexed
-      ? Math.round(defaultClusterScore)
-      : CONFIG.NO_SCORE_TEXT;
-
+  async displayUserScore(
+    defaultClusterScore,
+    defaultClusterRank,
+    defaultClusterName,
+    accountIndexed
+  ) {
     let tooltip = CONFIG.NO_SCORE_TOOLTIP;
+    let label = '';
+    let value = CONFIG.NO_SCORE_TEXT;
 
-    if (accountIndexed) {
-      tooltip = `${defaultClusterName} Score ${roundedDefaultClusterScore}`;
+    const option = await this._settings.getOptionValue('displaySetting');
+
+    if (
+      accountIndexed &&
+      ['showRanksWithScoreFallback', 'showRanks'].includes(option) &&
+      defaultClusterRank
+    ) {
+      value = `${defaultClusterRank}`;
+      label = `${defaultClusterName} Rank`;
+      tooltip = `${defaultClusterName} Rank ${defaultClusterRank}`;
+    } else if (option !== 'showRanks') {
+      label = `${defaultClusterName} Score`;
+
+      if (accountIndexed) {
+        value = Math.round(defaultClusterScore);
+        tooltip = `${defaultClusterName} Score ${value}`;
+      }
     }
 
     const displayElement = document.createElement('div');
     displayElement.classList.add('ProfileNav-item');
     displayElement.classList.add(PROFILE_SCORE_EXTENSION_CLASS_NAME);
+
     displayElement.innerHTML = `
             <div class="ProfileNav-stat ProfileNav-stat--link u-borderUserColor u-textCenter js-tooltip js-nav u-textUserColor" href="#" data-original-title="${tooltip}">
-                  <span class="ProfileNav-label">${defaultClusterName} Score</span>
-                  <span class="ProfileNav-value" data-count="${roundedDefaultClusterScore}" data-is-compact="false">${roundedDefaultClusterScore}</span>
+                  <span class="ProfileNav-label">${label}</span>
+                  <span class="ProfileNav-value" data-count="${value}" data-is-compact="false">${value}</span>
             </div>
         `;
 
-    if (accountIndexed) {
-      const popup = new ProfilePopup(this.getUserId(), this._api, this._settings);
-      popup.showOnClick(displayElement);
+    if (label) {
+      if (accountIndexed) {
+        const popup = new ProfilePopup(this.getUserId(), this._api, this._settings);
+        popup.showOnClick(displayElement);
+      }
+    } else {
+      displayElement.style.display = 'none';
     }
 
     document

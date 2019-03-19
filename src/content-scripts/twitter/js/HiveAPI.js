@@ -14,27 +14,31 @@ export class HiveAPI {
     this.cache = _cache;
   }
 
-  async getTwitterUserScore(id, cluster = this.defaultCluster) {
+  async getTwitterUserScore(id, clusterName = this.defaultCluster) {
     const { data, status } = await this.getTwitterUserData(id);
 
     let score = 0;
-    let name = cluster;
+    let name = clusterName;
     let indexed = false;
+    let rank = null;
 
     if (status === HIVE_API_FETCH_DATA_STATUS.SUCCESS) {
-      if (cluster === 'Highest') {
+      if (clusterName === 'Highest') {
         const highestScoreCluster = data.clusters.slice().sort((a, b) => b.score - a.score)[0];
 
         name = highestScoreCluster.abbr;
         score = highestScoreCluster.score;
+        rank = highestScoreCluster.rank;
       } else {
-        score = data.clusters.find(item => item.abbr === cluster).score;
+        const cluster = data.clusters.find(item => item.abbr === clusterName);
+        score = cluster.score;
+        rank = cluster.rank;
       }
 
       indexed = true;
     }
 
-    return { name, score, indexed };
+    return { name, score, rank, indexed };
   }
 
   async getTwitterUserClusters(id) {

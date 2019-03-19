@@ -27,18 +27,13 @@ const observeDOM = (() => {
   };
 })();
 
-function getOptionValue(name) {
-  return new Promise(resolve => {
-    chrome.storage.sync.get([name], result => resolve(result[name]));
-  });
-}
-
 (async () => {
-  const clusterToDisplay = await getOptionValue('clusterToDisplay');
+  const settings = new ExtensionSettings();
+
+  const clusterToDisplay = await settings.getOptionValue('clusterToDisplay');
 
   const cache = new CustomCache();
   const api = new HiveAPI(CONFIG.API_HOST, clusterToDisplay, cache);
-  const settings = new ExtensionSettings();
 
   const twitterProfileScore = new TwitterProfileScoreExtension(api, settings);
   const twitterTweetsAuthorScoreExtension = new TwitterTweetsAuthorScoreExtension(api, settings);
