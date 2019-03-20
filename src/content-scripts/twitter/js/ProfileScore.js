@@ -6,6 +6,7 @@ console.log('config is ', CONFIG);
 const PROFILE_SCORE_EXTENSION_CLASS_NAME = 'HiveExtension-Twitter_profile-score';
 const PROFILE_SIDEBAR_SELECTOR = '.ProfileSidebar';
 const PROFILE_NAV_SELECTOR = '.ProfileNav';
+const PROCESSED_INDICATOR_CLASS = 'HiveExtension-Twitter_profile-score-processed';
 
 export class TwitterProfileScoreExtension {
   _api;
@@ -29,13 +30,15 @@ export class TwitterProfileScoreExtension {
       return;
     }
 
-    const userTwitterId = this.getUserId();
+    const profileNav = document.querySelector('.ProfileNav-list');
 
-    if (userTwitterId === this.previousUserId) {
+    if (profileNav.classList.contains(PROCESSED_INDICATOR_CLASS)) {
       return;
     }
 
-    this.previousUserId = userTwitterId;
+    profileNav.classList.add(PROCESSED_INDICATOR_CLASS);
+
+    const userTwitterId = this.getUserId();
 
     const {
       score: defaultClusterScore,

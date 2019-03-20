@@ -104,7 +104,7 @@ export class TwitterTweetsAuthorScoreExtension {
         ['showRanksWithScoreFallback', 'showRanks'].includes(option) &&
         defaultClusterRank
       ) {
-        value = `${defaultClusterRank}`;
+        value = `#${defaultClusterRank}`;
         tooltip = `${defaultClusterName} Rank ${defaultClusterRank}`;
       } else if (accountIndexed && option !== 'showRanks') {
         value = Math.round(userScore);
