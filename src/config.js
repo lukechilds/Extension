@@ -5,7 +5,8 @@ export const CONFIG = {
     displaySetting: 'showRanks',
     useIcons: false,
     subscribedToNewsletter: false,
-    showScoreOnTweets: true
+    showScoreOnTweets: true,
+    topFollowersCluster: 'Crypto'
   },
   MAX_SCORE: 1000,
   NO_SCORE_TEXT: 'N/A',

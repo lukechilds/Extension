@@ -15,6 +15,11 @@ export class ProfilePopup {
 
   async showOnClick(displayElement) {
     const clusters = await this.api.getTwitterUserClusters(this.userTwitterId);
+    const topFollowersCluster = await this.settings.getOptionValue('topFollowersCluster');
+    const { followers } = await this.api.getTwitterUserScore(
+      this.userTwitterId,
+      topFollowersCluster
+    );
 
     let popupNode, closePopup;
 
@@ -86,10 +91,8 @@ export class ProfilePopup {
 
       let FOLLOWERS_HTML = '';
 
-      const cryptoCluster = clusters.find(item => item.abbr === 'Crypto');
-
-      if (cryptoCluster) {
-        cryptoCluster.followers.forEach(({ screenName }) => {
+      if (followers) {
+        followers.forEach(({ screenName }) => {
           FOLLOWERS_HTML += `
                         <div class="${POPUP_CLASS}_followers_follower">
                             <img class="${POPUP_CLASS}_followers_follower_image" src="https://twitter.com/${screenName}/profile_image?size=mini" />
@@ -124,13 +127,14 @@ export class ProfilePopup {
 
       const { top } = popupNode.getBoundingClientRect();
 
+      const offsetFromTrigger = 6;
       const collidingElementsHeight = 50;
 
-      const positionChange = popupNode.offsetHeight + collidingElementsHeight;
+      const positionChange = popupNode.offsetHeight + offsetFromTrigger;
 
-      let newTopChange = -(popupNode.offsetHeight + collidingElementsHeight);
+      let newTopChange = -(popupNode.offsetHeight + offsetFromTrigger);
 
-      if (top >= positionChange) {
+      if (top >= positionChange + collidingElementsHeight) {
         popupNode.style.top = `${newTopChange}px`;
       }
 

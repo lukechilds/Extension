@@ -15,12 +15,18 @@ export class HiveAPI {
   }
 
   async getTwitterUserScore(id, clusterName = this.defaultCluster) {
+    if (!id) {
+      console.error('HiveExtension::HiveAPI::getTwitterUserScore::User ID is undefined');
+      return {};
+    }
+
     const { data, status } = await this.getTwitterUserData(id);
 
     let score = 0;
     let name = clusterName;
     let indexed = false;
     let rank = null;
+    let followers = [];
 
     if (status === HIVE_API_FETCH_DATA_STATUS.SUCCESS) {
       if (clusterName === 'Highest') {
@@ -29,16 +35,18 @@ export class HiveAPI {
         name = highestScoreCluster.abbr;
         score = highestScoreCluster.score;
         rank = highestScoreCluster.rank;
+        followers = highestScoreCluster.followers;
       } else {
         const cluster = data.clusters.find(item => item.abbr === clusterName);
         score = cluster.score;
         rank = cluster.rank;
+        followers = cluster.followers;
       }
 
       indexed = true;
     }
 
-    return { name, score, rank, indexed };
+    return { name, score, rank, indexed, followers };
   }
 
   async getTwitterUserClusters(id) {

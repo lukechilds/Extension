@@ -3,7 +3,8 @@ import { ExtensionSettings } from '../content-scripts/twitter/js/Settings';
 
 const SETTINGS_SELECTS = [
   ['#cluster-options-select', 'clusterToDisplay'],
-  ['#display-settings-select', 'displaySetting']
+  ['#display-settings-select', 'displaySetting'],
+  ['#top-followers-cluster-select', 'topFollowersCluster']
 ];
 
 SETTINGS_SELECTS.forEach(([selector, name]) => {

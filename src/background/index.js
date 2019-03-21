@@ -4,6 +4,7 @@ import { CONFIG, MESSAGES } from '../config';
 
 chrome.runtime.onInstalled.addListener(function() {
   const defaultOptionsNames = Object.keys(CONFIG.DEFAULT_OPTIONS);
+
   chrome.storage.sync.get(defaultOptionsNames, result => {
     defaultOptionsNames.map(option => {
       if (typeof result[option] === 'undefined') {

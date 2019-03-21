@@ -1,5 +1,6 @@
-// $primaryColor: #1da1f2;
-$primaryColor: #817aff;
+:root {
+  --primary-color: #1da1f2;
+}
 
 .HiveExtension-Twitter {
   &_profile-score {
@@ -18,11 +19,8 @@ $primaryColor: #817aff;
     width: 48px;
 
     &-icons {
-      // $badgeColor: #817aff;
-      $badgeColor: $primaryColor;
-
       #{$root}_display {
-        background: $badgeColor !important;
+        background: var(--primary-color) !important;
         border-radius: 5px;
         height: 18px;
 
@@ -52,7 +50,7 @@ $primaryColor: #817aff;
 
         #{$root}_text {
           background: white;
-          color: $badgeColor;
+          color: var(--primary-color);
           display: block;
           min-width: 26px;
           line-height: 1;
@@ -96,7 +94,7 @@ $primaryColor: #817aff;
         }
 
         &:hover {
-          color: $badgeColor;
+          color: var(--primary-color);
         }
       }
     }
@@ -110,7 +108,7 @@ $primaryColor: #817aff;
       color: #657786;
 
       &:hover {
-        color: #4ab3f4;
+        color: var(--primary-color);
       }
 
       &-in-thread {
@@ -141,8 +139,6 @@ $primaryColor: #817aff;
 
       color: #657786;
 
-      $highlightColor: #817aff;
-
       &_score {
         display: inline-block;
         font-size: 12px;
@@ -163,11 +159,11 @@ $primaryColor: #817aff;
 
       &:hover {
         #{$root}_score {
-          color: $highlightColor;
+          color: var(--primary-color);
         }
 
         #{$root}_icon {
-          fill: $highlightColor;
+          fill: var(--primary-color);
         }
       }
     }
@@ -188,6 +184,7 @@ $primaryColor: #817aff;
       user-select: none;
       color: #14171a;
       text-align: left;
+      cursor: initial;
 
       &-dark {
         color: #ffffff;
@@ -219,11 +216,11 @@ $primaryColor: #817aff;
       }
 
       &_credit {
-        color: $primaryColor;
+        color: var(--primary-color);
 
         &_icon {
           width: 16px;
-          fill: $primaryColor;
+          fill: var(--primary-color);
           vertical-align: bottom;
           float: left;
           margin-top: 3px;
@@ -231,7 +228,7 @@ $primaryColor: #817aff;
         }
 
         &:hover {
-          color: $primaryColor;
+          color: var(--primary-color);
         }
       }
 
@@ -307,7 +304,7 @@ $primaryColor: #817aff;
           }
 
           &_progress {
-            background-color: $primaryColor;
+            background-color: var(--primary-color);
             position: absolute;
             height: 4px;
             border-radius: 4px;

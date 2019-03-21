@@ -41,8 +41,27 @@ const observeDOM = (() => {
 
   const showScoreOnTweets = await settings.getOptionValue('showScoreOnTweets');
 
+  function updatePrimaryColor() {
+    const TEST_ELEMENT_ID = 'HiveExtension--test--anchor';
+
+    let testElement = document.getElementById(TEST_ELEMENT_ID);
+
+    if (!testElement) {
+      testElement = document.createElement('a');
+      testElement.id = TEST_ELEMENT_ID;
+      testElement.style.display = 'none';
+      document.head.appendChild(testElement);
+    }
+
+    const color = window.getComputedStyle(testElement).color;
+
+    document.querySelector(':root').style.setProperty('--primary-color', color);
+  }
+
   async function runExtensions() {
     icons.initialize();
+    updatePrimaryColor();
+
     await twitterProfileScore.start();
 
     if (showScoreOnTweets) {

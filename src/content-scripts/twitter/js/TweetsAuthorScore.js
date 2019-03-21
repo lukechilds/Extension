@@ -75,6 +75,10 @@ export class TwitterTweetsAuthorScoreExtension {
 
       const authorId = tweet.getAttribute('data-user-id');
 
+      if (!authorId) {
+        return;
+      }
+
       const {
         name: defaultClusterName,
         score: userScore,
@@ -84,9 +88,11 @@ export class TwitterTweetsAuthorScoreExtension {
 
       const tweetIsThread =
         Boolean(tweet.querySelector('.self-thread-tweet-cta')) ||
-        tweet.parentElement.parentElement.classList.contains('ThreadedConversation-tweet') ||
-        tweet.parentElement.classList.contains('conversation-first-visible-tweet') ||
-        tweet.classList.contains('conversation-tweet');
+        tweet.classList.contains('conversation-tweet') ||
+        (tweet.parentElement &&
+          tweet.parentElement.classList.contains('conversation-first-visible-tweet')) ||
+        (tweet.parentElement.parentElement &&
+          tweet.parentElement.parentElement.classList.contains('ThreadedConversation-tweet'));
 
       let threadClass = TWEET_AUTHOR_SCORE_CLASS + '_display-in-thread';
 
@@ -97,8 +103,8 @@ export class TwitterTweetsAuthorScoreExtension {
       const option = await this._settings.getOptionValue('displaySetting');
       const useIcons = await this._settings.getOptionValue('useIcons');
 
-      let value = CONFIG.NO_SCORE_TEXT;
-      let tooltip = CONFIG.NO_SCORE_TOOLTIP;
+      let value = option === 'showRanks' ? '' : CONFIG.NO_SCORE_TEXT;
+      let tooltip = option === 'showRanks' ? '' : CONFIG.NO_SCORE_TOOLTIP;
 
       if (
         accountIndexed &&
