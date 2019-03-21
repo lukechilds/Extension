@@ -1,7 +1,10 @@
+// $primaryColor: #1da1f2;
+$primaryColor: #817aff;
+
 .radial-progress {
   $circle-size: 160px;
   $circle-background: #d6dadc;
-  $circle-color: #8784ff;
+  $circle-color: $primaryColor;
   $inset-size: $circle-size - 20px;
   $inset-color: #fbfbfb;
   $transition-length: 1s;
@@ -101,6 +104,8 @@
   }
 
   &_tweet-author-score {
+    $root: &;
+
     text-align: center;
     display: block;
     float: left;
@@ -108,6 +113,91 @@
     margin-left: -58px;
     position: absolute;
     width: 48px;
+
+    &-icons {
+      // $badgeColor: #817aff;
+      $badgeColor: $primaryColor;
+
+      #{$root}_display {
+        background: $badgeColor !important;
+        border-radius: 5px;
+        height: 18px;
+
+        &::before {
+          display: block;
+          content: '';
+          background: white;
+          height: 12px;
+          width: 3px;
+          border-radius: 5px;
+          position: absolute;
+          left: 3px;
+          top: 3px;
+        }
+
+        &::after {
+          display: block;
+          content: '';
+          background: white;
+          height: 3px;
+          width: 3px;
+          border-radius: 50%;
+          position: absolute;
+          top: 3px;
+          left: 12px;
+        }
+
+        #{$root}_text {
+          background: white;
+          color: $badgeColor;
+          display: block;
+          min-width: 26px;
+          line-height: 1;
+          padding: 1px;
+          border-radius: 4px;
+          font-weight: bold;
+          font-size: 9px;
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 2px;
+          height: 10px;
+          line-height: 10px;
+        }
+
+        #{$root}_helper {
+          &::before {
+            display: block;
+            content: '';
+            background: white;
+            height: 7px;
+            width: 3px;
+            border-radius: 5px;
+            position: absolute;
+            left: 12px;
+            bottom: 3px;
+          }
+
+          &::after {
+            display: block;
+            content: '';
+            background: white;
+            height: 4px;
+            width: 4px;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 7px;
+          }
+        }
+
+        &:hover {
+          color: $badgeColor;
+        }
+      }
+    }
+
 
     &_display {
       z-index: 3;
@@ -133,7 +223,7 @@
 
           .js-navigation-active.stream-item &,
           .tweet:hover & {
-            background: #15202b;
+            background: #101922;
           }
         }
       }
@@ -305,7 +395,7 @@
           }
 
           &_progress {
-            background-color: rgba(87, 77, 255, 0.7);
+            background-color: $primaryColor;
             position: absolute;
             height: 4px;
             border-radius: 4px;

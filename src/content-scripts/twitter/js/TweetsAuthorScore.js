@@ -22,7 +22,7 @@ export class TwitterTweetsAuthorScoreExtension {
     document.querySelectorAll(TWEETS_SELECTOR).forEach(async tweet => {
       const processedClassName = `${TWEET_INDIVIDUAL_SCORE_CLASS}-processed`;
 
-      if (tweet.classList.contains(processedClassName)) {
+      if (!tweet || tweet.classList.contains(processedClassName)) {
         return;
       }
 
@@ -95,6 +95,7 @@ export class TwitterTweetsAuthorScoreExtension {
       }
 
       const option = await this._settings.getOptionValue('displaySetting');
+      const useIcons = await this._settings.getOptionValue('useIcons');
 
       let value = CONFIG.NO_SCORE_TEXT;
       let tooltip = CONFIG.NO_SCORE_TOOLTIP;
@@ -104,10 +105,20 @@ export class TwitterTweetsAuthorScoreExtension {
         ['showRanksWithScoreFallback', 'showRanks'].includes(option) &&
         defaultClusterRank
       ) {
-        value = `#${defaultClusterRank}`;
+        value = defaultClusterRank;
+
+        if (!useIcons) {
+          value = `#${value}`;
+        }
+
         tooltip = `${defaultClusterName} Rank ${defaultClusterRank}`;
       } else if (accountIndexed && option !== 'showRanks') {
         value = Math.round(userScore);
+
+        if (!useIcons) {
+          value = `[ ${value} ]`;
+        }
+
         tooltip = `${defaultClusterName} Score ${value}`;
       } else if (option === 'showRanks' && !accountIndexed) {
         value = '';
@@ -120,9 +131,18 @@ export class TwitterTweetsAuthorScoreExtension {
 
       const userScoreDisplay = document.createElement('div');
       userScoreDisplay.classList.add(TWEET_AUTHOR_SCORE_CLASS);
-      userScoreDisplay.innerHTML = `<b class="${TWEET_AUTHOR_SCORE_CLASS}_display ${
+
+      if (useIcons) {
+        userScoreDisplay.classList.add(`${TWEET_AUTHOR_SCORE_CLASS}-icons`);
+      }
+
+      userScoreDisplay.innerHTML = `
+        <b class="${TWEET_AUTHOR_SCORE_CLASS}_display ${
         tweetIsThread ? threadClass : ''
-      } js-tooltip" data-original-title="${tooltip}">${value}</b>`;
+      } js-tooltip" data-original-title="${tooltip}">
+          <span class="${TWEET_AUTHOR_SCORE_CLASS}_text">${value}</span>
+          <div class="${TWEET_AUTHOR_SCORE_CLASS}_helper"></div>
+        </b>`;
 
       if (accountIndexed) {
         const popup = new ProfilePopup(authorId, this._api, this._settings);

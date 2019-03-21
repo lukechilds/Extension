@@ -14,11 +14,6 @@ export class ProfilePopup {
   }
 
   async showOnClick(displayElement) {
-    const { score: allCryptoScore } = await this.api.getTwitterUserScore(
-      this.userTwitterId,
-      'Crypto'
-    );
-
     const clusters = await this.api.getTwitterUserClusters(this.userTwitterId);
 
     let popupNode, closePopup;
@@ -52,9 +47,6 @@ export class ProfilePopup {
       }
 
       closeAllPopups();
-
-      const roundedAllCryptoScore = Math.round(allCryptoScore);
-      const cryptoPercentage = Math.floor((roundedAllCryptoScore / CONFIG.MAX_SCORE) * 100);
 
       popupNode = document.createElement('div');
       popupNode.classList.add(POPUP_CLASS);
@@ -110,25 +102,7 @@ export class ProfilePopup {
       const CUSTOM_HTML = `
                 <div class="${POPUP_CLASS}_content">
                     <h3 class="${POPUP_CLASS}_title">PeopleScore</h3>
-                    <div class="radial-progress" data-progress="${cryptoPercentage}">
-                        <div class="circle">
-                            <div class="mask full">
-                                <div class="fill"></div>
-                            </div>
-                            <div class="mask half">
-                                <div class="fill"></div>
-                                <div class="fill fix"></div>
-                            </div>
-                        </div>
-                        <div class="circle_inset">
-                            <div class="percentage">
-                                <div class="numbers">
-                                    <span class="numbers_main">${roundedAllCryptoScore}</span>
-                                    <span class="numbers_helper">AVERAGE SCORE</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <br/>
                     ${clustersHTML}
                 </div>
                 <br/>
@@ -143,9 +117,11 @@ export class ProfilePopup {
 
       const { top } = popupNode.getBoundingClientRect();
 
-      const positionChange = popupNode.offsetHeight + 6;
+      const collidingElementsHeight = 50;
 
-      let newTopChange = -(popupNode.offsetHeight + 6);
+      const positionChange = popupNode.offsetHeight + collidingElementsHeight;
+
+      let newTopChange = -(popupNode.offsetHeight + collidingElementsHeight);
 
       if (top >= positionChange) {
         popupNode.style.top = `${newTopChange}px`;

@@ -32,7 +32,7 @@ export class TwitterProfileScoreExtension {
 
     const profileNav = document.querySelector('.ProfileNav-list');
 
-    if (profileNav.classList.contains(PROCESSED_INDICATOR_CLASS)) {
+    if (!profileNav || profileNav.classList.contains(PROCESSED_INDICATOR_CLASS)) {
       return;
     }
 
