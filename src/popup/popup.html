@@ -6,7 +6,11 @@
         <h3>Hive.one</h3>
         <p>Please reload Twitter page after changing these settings.</p>
         <div class="HiveExtension-options_option">
-          <div class="HiveExtension-options_option_title">Use icons</div>
+            <div class="HiveExtension-options_option_title">Show Score On Tweets</div>
+            <input class="HiveExtension-options_option_toggle" id="show-score-on-tweets" type="checkbox"/>
+          </div>
+        <div class="HiveExtension-options_option">
+          <div class="HiveExtension-options_option_title">Use Icons</div>
           <input class="HiveExtension-options_option_toggle" id="use-icons" type="checkbox"/>
         </div>
         <div class="HiveExtension-options_option">
@@ -29,6 +33,12 @@
             <option value="BCH">Display BCH cluster only</option>
             <option value="LTC">Display LTC cluster only</option>
           </select>
+        </div>
+        <br/>
+        <div class="HiveExtension-options_option" id="newsletter-option">
+          <div class="HiveExtension-options_option_title">Subscribe To Newsletter</div>
+          <input class="HiveExtension-options_option_input" placeholder="Enter your email" id="newsletter-email" />
+          <button class="HiveExtension-options_option_button" id="newsletter-subscribe">Subscribe</button>
         </div>
   </body>
 </html>

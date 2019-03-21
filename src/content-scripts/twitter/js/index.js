@@ -39,10 +39,15 @@ const observeDOM = (() => {
   const twitterTweetsAuthorScoreExtension = new TwitterTweetsAuthorScoreExtension(api, settings);
   const icons = new ExtensionIcons();
 
+  const showScoreOnTweets = await settings.getOptionValue('showScoreOnTweets');
+
   async function runExtensions() {
     icons.initialize();
     await twitterProfileScore.start();
-    await twitterTweetsAuthorScoreExtension.start();
+
+    if (showScoreOnTweets) {
+      await twitterTweetsAuthorScoreExtension.start();
+    }
   }
 
   observeDOM(document.getElementsByTagName('body')[0], runExtensions);

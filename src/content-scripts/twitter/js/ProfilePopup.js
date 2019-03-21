@@ -101,8 +101,6 @@ export class ProfilePopup {
 
       const CUSTOM_HTML = `
                 <div class="${POPUP_CLASS}_content">
-                    <h3 class="${POPUP_CLASS}_title">PeopleScore</h3>
-                    <br/>
                     ${clustersHTML}
                 </div>
                 <br/>
@@ -110,6 +108,15 @@ export class ProfilePopup {
                 <div class="${POPUP_CLASS}_followers">
                     ${FOLLOWERS_HTML}
                 </div>
+                <br/>
+                <a href="https://hive.one/profile/${
+                  this.userTwitterId
+                }" class="${POPUP_CLASS}_credit">
+                  Learn more about this profile at hive.one
+                  <svg viewBox="0 0 36 36" class="${POPUP_CLASS}_credit_icon">
+                    <use xlink:href="#hive-icon" />
+                  </svg>
+                </a>
           `;
       popupNode.innerHTML = CUSTOM_HTML;
 

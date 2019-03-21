@@ -3,7 +3,9 @@ export const CONFIG = {
   DEFAULT_OPTIONS: {
     clusterToDisplay: 'Crypto',
     displaySetting: 'showRanks',
-    useIcons: false
+    useIcons: false,
+    subscribedToNewsletter: false,
+    showScoreOnTweets: true
   },
   MAX_SCORE: 1000,
   NO_SCORE_TEXT: 'N/A',

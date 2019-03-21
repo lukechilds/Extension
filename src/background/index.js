@@ -3,8 +3,16 @@ import { CONFIG, MESSAGES } from '../config';
 /* global ga */
 
 chrome.runtime.onInstalled.addListener(function() {
-  chrome.storage.sync.set(CONFIG.DEFAULT_OPTIONS, function() {
-    console.log('HiveExtension::Set options to defaults: ', CONFIG.DEFAULT_OPTIONS);
+  const defaultOptionsNames = Object.keys(CONFIG.DEFAULT_OPTIONS);
+  chrome.storage.sync.get(defaultOptionsNames, result => {
+    defaultOptionsNames.map(option => {
+      if (typeof result[option] === 'undefined') {
+        console.log('HiveExtension::option', option, 'is undefined, will set it to default');
+        chrome.storage.sync.set({
+          [option]: CONFIG.DEFAULT_OPTIONS[option]
+        });
+      }
+    });
   });
 });
 
