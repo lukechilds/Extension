@@ -18,6 +18,10 @@
     position: absolute;
     width: 48px;
 
+    .GalleryTweet & {
+      display: none;
+    }
+
     &-icons {
       #{$root}_display {
         background: var(--primary-color) !important;
