@@ -198,6 +198,16 @@
           background-color: #15202b;
           border-color: #38444d;
         }
+
+        #{$root}_cluster-score_progress-bar {
+          &_bg {
+            background: black;
+          }
+
+          &_progress {
+            border-color: black;
+          }
+        }
       }
 
       &_title {
@@ -272,7 +282,7 @@
       &_cluster-score {
         position: relative;
 
-        &:nth-of-type(n + 3) {
+        &:nth-of-type(n + 2) {
           margin-top: 10px;
         }
 

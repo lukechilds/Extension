@@ -6,6 +6,7 @@ import { TwitterTweetsAuthorScoreExtension } from './TweetsAuthorScore';
 import { CONFIG } from '../../../config';
 import { ExtensionIcons } from './Icons';
 import { ExtensionSettings } from './Settings';
+import { TwitterProfileHoverPopupScoreExtension } from './ProfileHoverPopupScore';
 
 const observeDOM = (() => {
   const MutationObserver = window.MutationObserver || window.WebKitMutationObserver,
@@ -37,6 +38,7 @@ const observeDOM = (() => {
 
   const twitterProfileScore = new TwitterProfileScoreExtension(api, settings);
   const twitterTweetsAuthorScoreExtension = new TwitterTweetsAuthorScoreExtension(api, settings);
+  const profileHoverPopupScore = new TwitterProfileHoverPopupScoreExtension(api, settings);
   const icons = new ExtensionIcons();
 
   const showScoreOnTweets = await settings.getOptionValue('showScoreOnTweets');
@@ -67,6 +69,8 @@ const observeDOM = (() => {
     if (showScoreOnTweets) {
       await twitterTweetsAuthorScoreExtension.start();
     }
+
+    await profileHoverPopupScore.start();
   }
 
   observeDOM(document.getElementsByTagName('body')[0], runExtensions);
