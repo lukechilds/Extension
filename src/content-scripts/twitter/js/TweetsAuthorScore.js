@@ -146,8 +146,10 @@ export class TwitterTweetsAuthorScoreExtension {
         <b class="${TWEET_AUTHOR_SCORE_CLASS}_display ${
         tweetIsThread ? threadClass : ''
       } js-tooltip" data-original-title="${tooltip}">
+          <svg viewBox="0 0 36 36" class="${TWEET_AUTHOR_SCORE_CLASS}_icon">
+            <use xlink:href="#hive-icon-small" />
+          </svg>
           <span class="${TWEET_AUTHOR_SCORE_CLASS}_text">${value}</span>
-          <div class="${TWEET_AUTHOR_SCORE_CLASS}_helper"></div>
         </b>`;
 
       if (accountIndexed) {
