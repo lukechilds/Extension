@@ -4,9 +4,7 @@
     "description": "https://hive.one",
     "manifest_version": 2,
     "permissions": [
-        "activeTab",
-        "storage",
-        "declarativeContent"
+        "storage"
     ],
     "content_scripts": [
         {

@@ -97,8 +97,12 @@ export class TwitterProfileHoverPopupScoreExtension {
       displayElement.style.display = 'none';
     }
 
-    document
-      .querySelector(`${PROFILE_HOVER_CONTAINER} .ProfileCardStats-statList`)
-      .appendChild(displayElement);
+    const statList = document.querySelector(
+      `${PROFILE_HOVER_CONTAINER} .ProfileCardStats-statList`
+    );
+
+    if (statList) {
+      statList.appendChild(displayElement);
+    }
   }
 }
