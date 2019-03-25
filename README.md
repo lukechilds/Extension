@@ -6,7 +6,7 @@
 
 <div style="text-align: center;">
   <img width="514px" src="https://i.imgur.com/PJhRcMk.png" />
-  <img width="274px" src="https://i.imgur.com/a61X1U6.png" />
+  <img width="284px" src="https://i.imgur.com/a61X1U6.png" />
 </div>
 
 It is hard to tell, which Twitter accounts are truly influential. This extension displays influence scores directly on Twitter profiles.
