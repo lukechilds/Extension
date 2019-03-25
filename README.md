@@ -1,4 +1,6 @@
-# Browser extension to show user influence on Crypto Twitter.
+# <img width="60px" src="https://i.imgur.com/KK0Bs5b.jpg" /> Hive.one Extension
+
+> Browser extension to show user influence on Crypto Twitter.
 
 <div style="text-align: center;">
   <img width="514px" src="https://i.imgur.com/PJhRcMk.png" />
