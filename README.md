@@ -1,8 +1,8 @@
 # Browser extension to show user influence on Crypto Twitter.
 
 <div style="text-align: center;">
-  <img width="50%" src="https://i.imgur.com/V4gFqii.png" />
-  <img width="49%" src="https://i.imgur.com/xKk6792.png" />
+  <img width="514px" src="https://i.imgur.com/PJhRcMk.png" />
+  <img width="196px" src="https://i.imgur.com/3MLLaql.png" />
 </div>
 
 It is hard to tell, which Twitter accounts are truly influential. This extension displays influence scores directly on Twitter profiles.
