@@ -15,5 +15,8 @@ export const CONFIG = {
 };
 
 export const MESSAGES = {
+  FETCH: 'fetch',
+  FETCH_SUCCESS: 'fetch-success',
+  FETCH_FAILURE: 'fetch-failure',
   TRACK_EVENT: 'trackEvent'
 };

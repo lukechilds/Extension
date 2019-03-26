@@ -49,10 +49,29 @@ ga('create', CONFIG.GOOGLE_ANALYTICS_ID, 'auto');
 ga('set', 'checkProtocolTask', () => {});
 ga('send', 'pageview', '/');
 
-chrome.runtime.onMessage.addListener(request => {
+async function fetchURL(url, options, callback) {
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    callback({
+      type: MESSAGES.FETCH_SUCCESS,
+      data
+    });
+  } catch (error) {
+    callback({
+      type: MESSAGES.FETCH_FAILURE,
+      error
+    });
+  }
+}
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.type) {
     case MESSAGES.TRACK_EVENT:
       ga('send', 'event', request.category, request.action);
       break;
+    case MESSAGES.FETCH:
+      fetchURL(request.url, request.options, sendResponse);
+      return true;
   }
 });

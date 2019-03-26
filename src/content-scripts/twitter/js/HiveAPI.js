@@ -1,3 +1,5 @@
+import { MESSAGES } from '../../../config';
+
 class HIVE_API_FETCH_DATA_STATUS {
   static SUCCESS = 'success';
   static ERROR = 'error';
@@ -72,8 +74,7 @@ export class HiveAPI {
     let status, data;
 
     try {
-      const response = await fetch(`${this.host}/api/top-people/${id}`);
-      data = await response.json();
+      data = await this.fetchInBackgroundContext(`${this.host}/api/top-people/${id}`);
       status = HIVE_API_FETCH_DATA_STATUS.SUCCESS;
     } catch (error) {
       status = HIVE_API_FETCH_DATA_STATUS.ERROR;
@@ -91,5 +92,23 @@ export class HiveAPI {
 
   getUserScoreStoringCacheKey(id) {
     return `user_${id}_allCrypto_score`;
+  }
+
+  fetchInBackgroundContext(url) {
+    return new Promise((resolve, reject) => {
+      chrome.runtime.sendMessage(
+        {
+          type: MESSAGES.FETCH,
+          url
+        },
+        ({ type, data, error }) => {
+          if (type === MESSAGES.FETCH_SUCCESS) {
+            resolve(data);
+          } else {
+            reject(error);
+          }
+        }
+      );
+    });
   }
 }

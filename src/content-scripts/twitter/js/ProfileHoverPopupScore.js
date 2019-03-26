@@ -20,14 +20,18 @@ export class TwitterProfileHoverPopupScoreExtension {
     }
   }
 
-  async start() {
+  shouldRun() {
     const container = document.querySelector(PROFILE_HOVER_CONTAINER);
 
-    if (
-      !container ||
-      container.querySelector(`.${ELEMENT_CLASS}`) ||
-      container.style.display === 'none'
-    ) {
+    return (
+      container &&
+      !container.querySelector(`.${ELEMENT_CLASS}`) &&
+      container.style.display !== 'none'
+    );
+  }
+
+  async start() {
+    if (!this.shouldRun()) {
       return;
     }
 
@@ -101,7 +105,7 @@ export class TwitterProfileHoverPopupScoreExtension {
       `${PROFILE_HOVER_CONTAINER} .ProfileCardStats-statList`
     );
 
-    if (statList) {
+    if (statList && this.shouldRun()) {
       statList.appendChild(displayElement);
     }
   }

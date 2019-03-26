@@ -1,5 +1,7 @@
 import './popup.scss';
 import { ExtensionSettings } from '../content-scripts/twitter/js/Settings';
+import { HiveAPI } from '../content-scripts/twitter/js/HiveAPI';
+import { CONFIG } from '../config';
 
 const SETTINGS_SELECTS = [
   ['#cluster-options-select', 'clusterToDisplay'],
@@ -48,6 +50,7 @@ SCORE_ON_TWEETS_CHECKBOX.addEventListener('click', event => {
 });
 
 const settings = new ExtensionSettings();
+const api = new HiveAPI(CONFIG.API_HOST);
 
 (async () => {
   if (!(await settings.getOptionValue('subscribedToNewsletter'))) {
@@ -55,7 +58,7 @@ const settings = new ExtensionSettings();
 
     document.querySelector('#newsletter-subscribe').addEventListener('click', async () => {
       try {
-        fetch(
+        api.fetchInBackgroundContext(
           `https://top.us16.list-manage.com/subscribe/post-json?u=ceb4e009307c8f47c4d2ddfb2&amp;id=dd29d770c2&EMAIL=${
             document.querySelector('#newsletter-email').value
           }`
