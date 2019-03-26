@@ -1,5 +1,4 @@
 import { ProfilePopup } from './ProfilePopup';
-import { CONFIG } from '../../../config';
 
 const TWEET_AUTHOR_SCORE_CLASS = 'HiveExtension-Twitter_tweet-author-score';
 const TWEET_INDIVIDUAL_SCORE_CLASS = 'HiveExtension-Twitter_tweet-individual-score';
@@ -86,6 +85,10 @@ export class TwitterTweetsAuthorScoreExtension {
         indexed: accountIndexed
       } = await this._api.getTwitterUserScore(authorId);
 
+      if (!accountIndexed) {
+        return;
+      }
+
       const tweetIsThread =
         Boolean(tweet.querySelector('.self-thread-tweet-cta')) ||
         tweet.classList.contains('conversation-tweet') ||
@@ -103,14 +106,10 @@ export class TwitterTweetsAuthorScoreExtension {
       const option = await this._settings.getOptionValue('displaySetting');
       const useIcons = await this._settings.getOptionValue('useIcons');
 
-      let value = option === 'showRanks' ? '' : CONFIG.NO_SCORE_TEXT;
-      let tooltip = option === 'showRanks' ? '' : CONFIG.NO_SCORE_TOOLTIP;
+      let value = '';
+      let tooltip = '';
 
-      if (
-        accountIndexed &&
-        ['showRanksWithScoreFallback', 'showRanks'].includes(option) &&
-        defaultClusterRank
-      ) {
+      if (['showRanksWithScoreFallback', 'showRanks'].includes(option) && defaultClusterRank) {
         value = defaultClusterRank;
 
         if (!useIcons) {
@@ -118,7 +117,7 @@ export class TwitterTweetsAuthorScoreExtension {
         }
 
         tooltip = `${defaultClusterName} Rank ${defaultClusterRank}`;
-      } else if (accountIndexed && option !== 'showRanks') {
+      } else if (option !== 'showRanks') {
         value = Math.round(userScore);
 
         if (!useIcons) {
@@ -126,9 +125,6 @@ export class TwitterTweetsAuthorScoreExtension {
         }
 
         tooltip = `${defaultClusterName} Score ${value}`;
-      } else if (option === 'showRanks' && !accountIndexed) {
-        value = '';
-        tooltip = '';
       }
 
       if (!value || !tooltip) {

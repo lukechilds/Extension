@@ -61,27 +61,24 @@ export class TwitterProfileScoreExtension {
     defaultClusterName,
     accountIndexed
   ) {
-    let tooltip = CONFIG.NO_SCORE_TOOLTIP;
+    if (!accountIndexed) {
+      return;
+    }
+
+    let tooltip = '';
     let label = '';
-    let value = CONFIG.NO_SCORE_TEXT;
+    let value = '';
 
     const option = await this._settings.getOptionValue('displaySetting');
 
-    if (
-      accountIndexed &&
-      ['showRanksWithScoreFallback', 'showRanks'].includes(option) &&
-      defaultClusterRank
-    ) {
+    if (['showRanksWithScoreFallback', 'showRanks'].includes(option) && defaultClusterRank) {
       value = `${defaultClusterRank}`;
       label = `${defaultClusterName} Rank`;
       tooltip = `${defaultClusterName} Rank ${defaultClusterRank}`;
     } else if (option !== 'showRanks') {
       label = `${defaultClusterName} Score`;
-
-      if (accountIndexed) {
-        value = Math.round(defaultClusterScore);
-        tooltip = `${defaultClusterName} Score ${value}`;
-      }
+      value = Math.round(defaultClusterScore);
+      tooltip = `${defaultClusterName} Score ${value}`;
     }
 
     const displayElement = document.createElement('div');
@@ -95,14 +92,8 @@ export class TwitterProfileScoreExtension {
             </div>
         `;
 
-    if (label) {
-      if (accountIndexed) {
-        const popup = new ProfilePopup(this.getUserId(), this._api, this._settings);
-        popup.showOnClick(displayElement);
-      }
-    } else {
-      displayElement.style.display = 'none';
-    }
+    const popup = new ProfilePopup(this.getUserId(), this._api, this._settings);
+    popup.showOnClick(displayElement);
 
     document
       .querySelector('.ProfileNav-item:nth-of-type(4)')

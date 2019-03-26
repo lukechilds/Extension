@@ -1,5 +1,3 @@
-import { CONFIG } from '../../../config';
-
 const PROFILE_HOVER_CONTAINER = '#profile-hover-container';
 const ELEMENT_CLASS = 'HiveExtension-Twitter_profile-hover-popup';
 
@@ -62,27 +60,24 @@ export class TwitterProfileHoverPopupScoreExtension {
     defaultClusterName,
     accountIndexed
   ) {
-    let tooltip = CONFIG.NO_SCORE_TOOLTIP;
+    if (!accountIndexed) {
+      return;
+    }
+
+    let tooltip = '';
     let label = '';
-    let value = CONFIG.NO_SCORE_TEXT;
+    let value = '';
 
     const option = await this._settings.getOptionValue('displaySetting');
 
-    if (
-      accountIndexed &&
-      ['showRanksWithScoreFallback', 'showRanks'].includes(option) &&
-      defaultClusterRank
-    ) {
+    if (['showRanksWithScoreFallback', 'showRanks'].includes(option) && defaultClusterRank) {
       value = `${defaultClusterRank}`;
       label = `${defaultClusterName} Rank`;
       tooltip = `${defaultClusterName} Rank ${defaultClusterRank}`;
     } else if (option !== 'showRanks') {
       label = `${defaultClusterName} Score`;
-
-      if (accountIndexed) {
-        value = Math.round(defaultClusterScore);
-        tooltip = `${defaultClusterName} Score ${value}`;
-      }
+      value = Math.round(defaultClusterScore);
+      tooltip = `${defaultClusterName} Score ${value}`;
     }
 
     const displayElement = document.createElement('li');
