@@ -4,6 +4,8 @@
 
 > Browser extension to show user influence on Crypto Twitter.
 
+<a href="https://chrome.google.com/webstore/detail/dibbclmoocoenjjdjgdmgdbedcjeafjl/"><img src="https://img.shields.io/chrome-web-store/v/dibbclmoocoenjjdjgdmgdbedcjeafjl.svg"></a>
+
 <div style="text-align: center;">
   <img width="514px" src="https://i.imgur.com/PJhRcMk.png" />
   <img width="284px" src="https://i.imgur.com/a61X1U6.png" />
@@ -16,7 +18,11 @@ These are the same scores as available on [Hive.one](https://hive.one). You can 
 
 ## Install
 
-*We recommend installing using Chrome store, but here are instructions if you'd like to build and install it manually.*
+- [Chrome extension]()
+
+## Build from source
+
+*We strongly recommend installing using Chrome Store, but here are instructions if you'd like to build and install it manually.*
 
 ```
 npm install
